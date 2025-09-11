@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../utils/cn';
 
@@ -29,8 +29,20 @@ const Message = ({ message, index }) => {
 };
 
 const MessageList = ({ messages = [] }) => {
+    const containerRef = useRef(null);
+    useEffect(() => {
+        if (containerRef.current) {
+            containerRef.current.scrollTop = containerRef.current.scrollHeight;
+        }
+    }, [messages]);
+    // Debug log to check what messages are received
+    console.log('MessageList messages:', messages);
     return (
-        <div className="flex-1 overflow-y-auto px-4">
+        <div
+            ref={containerRef}
+            className="flex-1 px-4 overflow-y-scroll scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-400"
+            style={{ maxHeight: '60vh', minHeight: '300px' }}
+        >
             <div className="max-w-4xl mx-auto py-6">
                 <AnimatePresence initial={false}>
                     {messages.map((message, index) => (

@@ -1,21 +1,27 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://127.0.0.1:3001';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
-export async function sendChatMessage(message) {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/api/chat`, 
-      { message },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: false // Changed to false for simpler CORS
-      }
-    );
-    return response.data.reply;
-  } catch (error) {
-    console.error('API Error:', error);
-    throw error;
-  }
+// Fetch all chats
+export async function fetchChats() {
+  const res = await axios.get(`${API_BASE_URL}/chats`);
+  return res.data;
+}
+
+// Create a new chat
+export async function createChat() {
+  const res = await axios.post(`${API_BASE_URL}/chat`);
+  return res.data;
+}
+
+// Fetch messages for a chat
+export async function fetchMessages(chatId) {
+  const res = await axios.get(`${API_BASE_URL}/chat/${chatId}`);
+  return res.data;
+}
+
+// Send a message to a chat
+export async function sendMessage(chatId, content) {
+  const res = await axios.post(`${API_BASE_URL}/chat/${chatId}/message`, { content });
+  return res.data;
 }

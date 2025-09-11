@@ -30,6 +30,7 @@ const MessageInput = ({ onSendMessage, className }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (message.trim()) {
+            console.log('MessageInput handleSubmit called with:', message.trim());
             onSendMessage(message.trim());
             setMessage('');
             if (textareaRef.current) {

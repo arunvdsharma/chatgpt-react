@@ -4,11 +4,11 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import WelcomeMessage from './WelcomeMessage';
 import LoadingDots from './LoadingDots';
-import { sendChatMessage } from '../utils/api';
+import { sendMessage, fetchMessages } from '../utils/api';
 import { cn } from '../utils/cn';
 
-const ChatWindow = () => {
-    const [messages, setMessages] = useState([]);
+
+const ChatWindow = ({ chatId, messages, setMessages, hasSentMessage, setHasSentMessage }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const messagesEndRef = useRef(null);
@@ -38,24 +38,45 @@ const ChatWindow = () => {
     }, [messages.length]);
 
     const handleSendMessage = async (text) => {
-        setMessages([...messages, { sender: 'Request', text }]);
+        if (!chatId) {
+            setError('No chat selected.');
+            return;
+        }
         setLoading(true);
         setError(null);
         try {
-            const reply = await sendChatMessage(text);
-            setMessages((msgs) => [...msgs, { sender: 'Response', text: reply }]);
+            console.log('Calling sendMessage API with:', chatId, text);
+            await sendMessage(chatId, text);
+            console.log('sendMessage API call finished');
+            // After sending, fetch all messages for the chat using API utility
+            console.log('Calling fetchMessages API with:', chatId);
+            const msgs = await fetchMessages(chatId);
+            console.log('Fetched messages from backend:', msgs);
+            const mappedMsgs = msgs.map(msg => ({
+                sender: msg.role === 'user' ? 'Request' : 'Response',
+                text: msg.content,
+                timestamp: msg.timestamp
+            }));
+            console.log('Mapped messages for UI:', mappedMsgs);
+            setMessages(mappedMsgs);
+            setHasSentMessage(true);
         } catch (err) {
+            console.error('ChatWindow handleSendMessage error:', err);
             setError('Failed to get response from the server.');
+            setMessages([]);
         } finally {
             setLoading(false);
         }
     };
 
+    // Debug log to check messages prop and setMessages
+    console.log('ChatWindow messages prop:', messages);
+    console.log('ChatWindow setMessages:', typeof setMessages);
     return (
         <div className="relative flex h-full flex-col">
             <main className="flex-1 flex flex-col overflow-hidden">
                 <AnimatePresence mode="wait">
-                    {messages.length === 0 ? (
+                    {(messages.length === 0 && !hasSentMessage) ? (
                         <motion.div
                             key="welcome"
                             initial={{ opacity: 0 }}
@@ -81,7 +102,7 @@ const ChatWindow = () => {
                         >
                             <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/75 border-b">
                                 <div className="h-14 flex items-center px-4">
-                                    <h2 className="text-lg font-semibold">Wall-e</h2>
+                                    <h2 className="text-lg font-semibold">Chintan-AI</h2>
                                 </div>
                             </header>
                             
@@ -97,7 +118,7 @@ const ChatWindow = () => {
                                         >
                                             <div className="max-w-4xl mx-auto">
                                                 <div className="inline-flex items-center gap-2 rounded-lg bg-muted px-4 py-2 text-muted-foreground">
-                                                    Wall-e is thinking
+                                                    Chintan-AI is thinking
                                                     <LoadingDots />
                                                 </div>
                                             </div>

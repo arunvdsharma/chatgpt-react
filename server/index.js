@@ -1,9 +1,19 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const OpenAI = require('openai');
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('[MongoDB] Connected'))
+  .catch((err) => console.error('[MongoDB] Connection error:', err));
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -41,36 +51,10 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Chat endpoint
-app.post('/api/chat', async (req, res) => {
-  try {
-    const { message } = req.body;
-    
-    if (!message) {
-      return res.status(400).json({ error: 'Message is required' });
-    }
 
-    // Call OpenAI API
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: message }],
-      model: "gpt-3.5-turbo",
-    });
-
-    // Extract the response
-    const reply = completion.choices[0].message.content;
-
-    res.json({ 
-      reply,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('Chat error:', error);
-    res.status(500).json({ 
-      error: 'Failed to process chat message',
-      details: error.message 
-    });
-  }
-});
+// Mount main app routes
+const routes = require('./routes');
+app.use(routes);
 
 // Start server
 const server = app.listen(PORT, () => {

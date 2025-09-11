@@ -15,7 +15,7 @@ const WelcomeMessage = () => {
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
             >
-                Wall-e
+                Chintan-AI
             </motion.h1>
             <motion.p
                 className="text-xl text-muted-foreground"
