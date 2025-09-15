@@ -6,6 +6,18 @@ const LlmImpl = require('./LlmImpl');
 
 const router = express.Router();
 
+// Delete a chat and its messages
+router.delete('/chat/:id', async (req, res) => {
+  try {
+    await Message.deleteMany({ chatId: req.params.id });
+    await Chat.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(`[ERROR DELETE /chat/${req.params.id}]`, err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Create new chat
 router.post('/chat', async (req, res) => {
   console.log('[POST /chat] Creating new chat');

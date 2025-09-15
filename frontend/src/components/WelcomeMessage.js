@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { APP_NAME } from '../constants';
 
 const WelcomeMessage = () => {
     return (
@@ -10,12 +11,12 @@ const WelcomeMessage = () => {
             className="text-center space-y-6 max-w-2xl mx-auto px-4"
         >
             <motion.h1 
-                className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60"
+                className="text-3xl font-bold mb-2 text-primary"
                 initial={{ scale: 0.95 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
             >
-                Chintan-AI
+                Welcome to {APP_NAME}!
             </motion.h1>
             <motion.p
                 className="text-xl text-muted-foreground"

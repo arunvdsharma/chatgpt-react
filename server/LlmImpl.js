@@ -9,7 +9,7 @@ module.exports = async function LlmImpl(userMessage) {
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
-        { role: 'system', content: 'You are Chintan-AI, a helpful assistant.' },
+  { role: 'system', content: 'You are CanvasAI, a helpful assistant.' },
         { role: 'user', content: userMessage }
       ],
       max_tokens: 512

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { APP_NAME } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
@@ -70,8 +71,7 @@ const ChatWindow = ({ chatId, messages, setMessages, hasSentMessage, setHasSentM
     };
 
     // Debug log to check messages prop and setMessages
-    console.log('ChatWindow messages prop:', messages);
-    console.log('ChatWindow setMessages:', typeof setMessages);
+   
     return (
         <div className="relative flex h-full flex-col">
             <main className="flex-1 flex flex-col overflow-hidden">
@@ -102,7 +102,7 @@ const ChatWindow = ({ chatId, messages, setMessages, hasSentMessage, setHasSentM
                         >
                             <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/75 border-b">
                                 <div className="h-14 flex items-center px-4">
-                                    <h2 className="text-lg font-semibold">Chintan-AI</h2>
+                                    <h2 className="text-lg font-semibold">{APP_NAME}</h2>
                                 </div>
                             </header>
                             
@@ -118,7 +118,7 @@ const ChatWindow = ({ chatId, messages, setMessages, hasSentMessage, setHasSentM
                                         >
                                             <div className="max-w-4xl mx-auto">
                                                 <div className="inline-flex items-center gap-2 rounded-lg bg-muted px-4 py-2 text-muted-foreground">
-                                                    Chintan-AI is thinking
+                                                    {APP_NAME} is thinking
                                                     <LoadingDots />
                                                 </div>
                                             </div>
