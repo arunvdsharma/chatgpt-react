@@ -1,9 +1,17 @@
 {
   "dependencies": {
-    "axios": "^1.11.0",
+    "@chroma-core/default-embed": "^0.1.8",
+    "@langchain/community": "^0.3.56",
+    "@langchain/core": "^0.3.76",
+    "@langchain/openai": "^0.6.12",
+    "axios": "^1.12.2",
+    "chai": "^6.0.1",
+    "chromadb": "^3.0.15",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "openai": "^5.20.0"
+    "langchain": "^0.3.34",
+    "openai": "^5.20.0",
+    "pdf-parse": "^1.1.1"
   }
 }
